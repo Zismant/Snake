@@ -1,4 +1,5 @@
-canvas {
-    width: 400px;
-    height: 400px;
+#canvas {
+    display: block;
+    margin: auto;
+
 }
