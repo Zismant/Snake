@@ -12,6 +12,8 @@ document.addEventListener('DOMContentLoaded', () => {
         y: 0,
         moveTo: null,
     };
+
+    const food = {};
     
     
     
@@ -21,6 +23,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
     
     function drawSnake() {
+        
         ctx.fillStyle = 'red';
         ctx.fillRect(snakeHead.x, snakeHead.y, el, el);
     }
@@ -38,27 +41,46 @@ document.addEventListener('DOMContentLoaded', () => {
         }
 
         document.addEventListener('keydown', (e) => {
-            if (e.code == 'ArrowLeft' || e.code == 'KeyA') snakeHead.moveTo = 'left';
-            else if (e.code == 'ArrowRight' || e.code == 'KeyD') snakeHead.moveTo = 'right';
-            else if (e.code == 'ArrowUp' || e.code == 'KeyW') snakeHead.moveTo = 'up';
-            else if (e.code == 'ArrowDown' || e.code == 'KeyS') snakeHead.moveTo = 'down';
+            if ( (e.code == 'ArrowLeft' || e.code == 'KeyA') && snakeHead.moveTo !== 'right') snakeHead.moveTo = 'left';
+            else if ( (e.code == 'ArrowRight' || e.code == 'KeyD') && snakeHead.moveTo !== 'left') snakeHead.moveTo = 'right';
+            else if ( (e.code == 'ArrowUp' || e.code == 'KeyW') && snakeHead.moveTo !== 'down') snakeHead.moveTo = 'up';
+            else if ( (e.code == 'ArrowDown' || e.code == 'KeyS') && snakeHead.moveTo !== 'up') snakeHead.moveTo = 'down';
         });   
 
-        if (snakeHead.x < 0) snakeHead.x = gameWidth;
+        if (snakeHead.x < 0) snakeHead.x = gameWidth - el;
         if (snakeHead.x > gameWidth) snakeHead.x = 0;
-        if (snakeHead.y < 0) snakeHead.y = gameHight;
+        if (snakeHead.y < 0) snakeHead.y = gameHight - el;
         if (snakeHead.y > gameHight) snakeHead.y = 0;
         
     }
+
+    function createNewFood() {
+        
+            food.x = Math.floor(Math.random() * (gameWidth -el - el ) + el);
+            food.y = Math.floor(Math.random() * (gameHight -el - el ) + el);
+        
+    }
+
+    function drawFood() {
+        ctx.fillStyle = 'green';
+        ctx.fillRect(food.x, food.y, el, el);
+        console.log(food);
+    }
     
-    function draw() {
+
+
+    
+    
+    function game() {
         drawFill();
+        drawFood();
         drawSnake();
         moveSnake();
     }
     
-    // window.requestAnimationFrame(draw);
-    setInterval(draw, 300);
+    createNewFood();
+    // window.requestAnimationFrame(game);
+    setInterval(game, 300);
 
 });
 
