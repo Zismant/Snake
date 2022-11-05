@@ -4,12 +4,16 @@ document.addEventListener('DOMContentLoaded', () => {
     const gameWidth = 300;
     const gameHight = 150;
     const el = 15;
+    const score = document.querySelector('span');
+    score.textContent = 0;
+    
+    
     
     const snake = [];
 
     const snakeHead = {
-        x: 0,
-        y: 0,
+        x: el * Math.floor( Math.random() *  (gameWidth / el - 0) + 0 ),
+        y: el * Math.floor( Math.random() *  (gameWidth / el - 0) + 0 ),
         moveTo: null,
     };
 
@@ -56,26 +60,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     function createNewFood() {
         
-            food.x = Math.floor(Math.random() * (gameWidth -el - el ) + el);
-            food.y = Math.floor(Math.random() * (gameHight -el - el ) + el);
+            food.x = el * Math.floor( Math.random() *  (gameWidth / el - 0) + 0 );
+            food.y = el * Math.floor( Math.random() *  (gameHight / el - 0) + 0 );
         
     }
 
     function drawFood() {
         ctx.fillStyle = 'green';
         ctx.fillRect(food.x, food.y, el, el);
-        console.log(food);
     }
     
+    function snakeEatingFood() {
+        if (snakeHead.x == food.x && snakeHead.y == food.y) {
+            score.textContent++;
+            createNewFood();
+        }
+    }
 
-
-    
-    
     function game() {
         drawFill();
         drawFood();
         drawSnake();
         moveSnake();
+        snakeEatingFood();
+        score.value
     }
     
     createNewFood();
