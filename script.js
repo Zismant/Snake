@@ -6,6 +6,9 @@ document.addEventListener('DOMContentLoaded', () => {
     const left = document.querySelector('#left');
     const right = document.querySelector('#right');
 
+    let step = 0;
+    let maxStep = 15;
+
     const gameWidth = 300;
     const gameHight = 150;
     const el = 15;
@@ -136,16 +139,27 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
 
-    function game() {
+    function gameLoop() {
+
+        requestAnimationFrame(gameLoop);
+        if (++step < maxStep) {
+            return;
+        }
+        step = 0;
+
+        ctx.clearRect(0, 0, gameWidth, gameHight);
         drawFill();
         drawFood();
         moveSnake();
         drawSnake();
+        console.log(step);
     }
 
+    gameLoop();
     createNewFood();
     controlSnakeDirection();
-    // window.requestAnimationFrame(game);
-    setInterval(game, 300);
+
+  
+    
 
 });
