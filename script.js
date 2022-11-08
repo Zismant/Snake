@@ -7,43 +7,102 @@ document.addEventListener('DOMContentLoaded', () => {
     const right = document.querySelector('#right');
 
     let step = 0;
-    let maxStep = 15;
+    let maxStep = 20;
 
     const gameWidth = 300;
     const gameHight = 150;
+
+   
+
     const el = 15;
     const score = document.querySelector('span');
     score.textContent = 0;
     let direction = null;
-    const snake = [{
-        x: el * Math.floor(Math.random() * (gameWidth / el - 0) + 0),
-        y: el * Math.floor(Math.random() * (gameWidth / el - 0) + 0),
-    }];
+   
 
-    const food = {};
+    
 
 
-
+// fill
     function drawFill() {
         ctx.fillStyle = 'aquamarine';
         ctx.fillRect(0, 0, gameWidth, gameHight);
     }
 
+
+
+
+// food
+    const food = {};
+    const passenger = new Image();
+    passenger.src = 'img/passenger1.png';
+
+    function createNewFood() {
+        
+        food.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
+        food.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
+        
+        snake.forEach(item => {
+        if (item.x == food.x && item.y == food.y) {createNewFood();}
+    });
+        
+    }
+    function drawFood() {
+        ctx.drawImage(passenger, food.x, food.y);
+    
+    }
+
+//uber
+    const uberFood = {};
+    const uber = new Image();
+    uber.src = 'img/uber.png';
+
+    function createUberFood() {
+        
+        uberFood.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
+        uberFood.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
+        
+        snake.forEach(item => {
+        if (item.x == uberFood.x && uberFood.y == food.y) {drawUberFood();}
+    });
+        
+    }
+
+    function drawUberFood() {
+        ctx.drawImage(uber, uberFood.x, uberFood.y);
+    
+    }
+
+
+
+
+
+// snake
+    const snake = [{
+        x: el * Math.floor(Math.random() * (gameWidth / el - 0) + 0),
+        y: el * Math.floor(Math.random() * (gameWidth / el - 0) + 0),
+    }];
+    const headImage = new Image();
+    headImage.src ='img/taxi11.svg';
+    const imageUp = new Image();
+    imageUp.src ='img/taxiUp1.png';
+    
     function drawSnake() {
         snake.forEach((item, i) => {
-            ctx.fillStyle = (i == 0) ? '#600' : '#F00';
-            ctx.fillRect(item.x, item.y, el, el);
+            if (i == 0) {
+                ctx.drawImage(headImage, item.x, item.y);
+            } else {ctx.drawImage(imageUp, item.x, item.y);}
+            
         });
 
     }
 
+    
     function moveSnake() {
+        
         let snakeX = snake[0].x;
         let snakeY = snake[0].y;
-
-        
-
-
+    
         if (direction == 'left') {
             snakeX -= el;
         } else if (direction == 'right') {
@@ -67,19 +126,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (snake[0].y > gameHight - el) {
             snakeY = 0;
         }
-
-
+        
+        if (snake[0].x == house.x && snake[0].y == house.y) {
+            createNewHouse();
+            
+              snake.length = 1;
+              score.textContent = 0;
+              direction = null;
+              alert(`GAME OVER, ти нащо людям в дім в'їхав???! Score: ${score.textContent}`);
+        }
         snake.unshift({
             x: snakeX,
             y: snakeY,
         });
+        
+        
+        
 
-        if (snake[0].x == food.x && snake[0].y == food.y) {
+        if ( (snake[0].x == food.x && snake[0].y == food.y) || (snake[0].x == uberFood.x + el && snake[0].y == uberFood.y) ) {
             score.textContent++;
             createNewFood();
+            createUberFood();
+
         } else {
             snake.pop();
         }
+
 
         snake.forEach((item, i) => {
             if (i > 0) {
@@ -92,6 +164,8 @@ document.addEventListener('DOMContentLoaded', () => {
                 }
             }
         });
+
+        
     }
 
     function controlSnakeDirection() {
@@ -123,21 +197,30 @@ document.addEventListener('DOMContentLoaded', () => {
 
     }
 
-    function createNewFood() {
+    //  house
+    const houseSmallImage = new Image();
+    houseSmallImage.src = 'img/houseSmall1.png';
+    const houseBigImage = new Image();
+    houseBigImage.src = 'img/houseBig.png';
+    const house = {};
+
+    function createNewHouse() {
         
-        food.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
-        food.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
+        house.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
+        house.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
+        console.log(house);
         
-        snake.forEach(item => {
-            if (item.x == food.x && item.y == food.y) {createNewFood();}
-        });
+        
     }
 
-    function drawFood() {
-        ctx.fillStyle = 'green';
-        ctx.fillRect(food.x, food.y, el, el);
+    function drawHouse() {
+        ctx.drawImage(houseSmallImage, house.x, house.y);
+        
+
     }
 
+
+// game Loop
 
     function gameLoop() {
 
@@ -150,14 +233,18 @@ document.addEventListener('DOMContentLoaded', () => {
         ctx.clearRect(0, 0, gameWidth, gameHight);
         drawFill();
         drawFood();
-        moveSnake();
+        drawUberFood();
+        drawHouse();
         drawSnake();
-        console.log(step);
+        moveSnake();
+        
     }
 
     gameLoop();
-    createNewFood();
     controlSnakeDirection();
+    createNewHouse();
+    createNewFood();
+    createUberFood();
 
   
     
