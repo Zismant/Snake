@@ -31,18 +31,18 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-    // food
-    const food = {};
-    const passenger = new Image();
-    passenger.src = 'img/passenger.png';
+    // passenger
+    const passenger = {};
+    const passengerImage = new Image();
+    passengerImage.src = 'img/passenger.png';
 
     function createPassenger() {
 
-        food.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
-        food.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
+        passenger.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
+        passenger.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
 
         snake.forEach(item => {
-            if (item.x == food.x && item.y == food.y) {
+            if (item.x == passenger.x && item.y == passenger.y) {
                 createPassenger();
                 return;
             }
@@ -51,22 +51,22 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function drawPassenger() {
-        ctx.drawImage(passenger, food.x, food.y);
+        ctx.drawImage(passengerImage, passenger.x, passenger.y);
 
     }
 
     //uber
-    const uberFood = {};
-    const uber = new Image();
-    uber.src = 'img/uber.png';
+    const uber = {};
+    const uberImage = new Image();
+    uberImage.src = 'img/uber.png';
 
     function createUber() {
 
-        uberFood.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
-        uberFood.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
+        uber.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
+        uber.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
 
         snake.forEach(item => {
-            if (item.x == uberFood.x && uberFood.y == food.y) {
+            if (item.x == uber.x  &&  item.y == uber.y ) {
                 createUber();
                 return;
             }
@@ -75,7 +75,7 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     function drawUber() {
-        ctx.drawImage(uber, uberFood.x, uberFood.y);
+        ctx.drawImage(uberImage, uber.x, uber.y);
 
     }
 
@@ -174,7 +174,7 @@ document.addEventListener('DOMContentLoaded', () => {
                 if (snake[0].x == item.x && snake[0].y == item.y) {
                     house.length = 0;
                     createHouse();
-    
+
                     snake.length = 1;
                     direction = null;
                     alert(`GAME OVER, ти нащо людям в дім в'їхав???! Score: ${score.textContent}`);
@@ -189,8 +189,8 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
 
-        if ((snake[0].x == food.x && snake[0].y == food.y) || 
-            (snake[0].x == uberFood.x + el && snake[0].y == uberFood.y)) {
+        if ((snake[0].x == passenger.x && snake[0].y == passenger.y) ||
+            (snake[0].x == uber.x + el && snake[0].y == uber.y)) {
             score.textContent++;
             createPassenger();
             createUber();
