@@ -7,23 +7,22 @@ document.addEventListener('DOMContentLoaded', () => {
     const right = document.querySelector('#right');
 
     let step = 0;
-    let maxStep = 20;
+    let maxStep = 30;
 
     const gameWidth = 1600;
     const gameHight = 800;
 
-   
 
     const el = 100;
     const score = document.querySelector('span');
     score.textContent = 0;
     let direction = null;
-   
-
-    
 
 
-// fill
+
+
+
+    // fill
     function drawFill() {
         ctx.fillStyle = 'aquamarine';
         ctx.fillRect(0, 0, gameWidth, gameHight);
@@ -32,78 +31,120 @@ document.addEventListener('DOMContentLoaded', () => {
 
 
 
-// food
+    // food
     const food = {};
     const passenger = new Image();
     passenger.src = 'img/passenger.png';
 
-    function createNewFood() {
-        
+    function createPassenger() {
+
         food.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
         food.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
-        
+
         snake.forEach(item => {
-        if (item.x == food.x && item.y == food.y) {createNewFood();}
-    });
-        
-    }
-    function drawFood() {
-        ctx.drawImage(passenger, food.x, food.y);
-    
-    }
-
-//uber
-    const uberFood = {};
-    const uber = new Image();
-    uber.src = 'img/uber.png';
-
-    function createUberFood() {
-        
-        uberFood.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
-        uberFood.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
-        
-        snake.forEach(item => {
-        if (item.x == uberFood.x && uberFood.y == food.y) {drawUberFood();}
-    });
-        
-    }
-
-    function drawUberFood() {
-        ctx.drawImage(uber, uberFood.x, uberFood.y);
-    
-    }
-
-
-
-
-
-// snake
-    const snake = [{
-        x: el * Math.floor(Math.random() * (gameWidth / el - 0) + 0),
-        y: el * Math.floor(Math.random() * (gameWidth / el - 0) + 0),
-    }];
-    const headImage = new Image();
-    headImage.src ='img/taxi.svg';
-    // headImage.src ='img/car.png';
-    const imageUp = new Image();
-    imageUp.src ='img/taxiUp.png';
-    
-    function drawSnake() {
-        snake.forEach((item, i) => {
-            if (i == 0) {
-                ctx.drawImage(headImage, item.x, item.y);
-            } else {ctx.drawImage(imageUp, item.x, item.y);}
-            
+            if (item.x == food.x && item.y == food.y) {
+                createPassenger();
+                return;
+            }
         });
 
     }
 
-    
+    function drawPassenger() {
+        ctx.drawImage(passenger, food.x, food.y);
+
+    }
+
+    //uber
+    const uberFood = {};
+    const uber = new Image();
+    uber.src = 'img/uber.png';
+
+    function createUber() {
+
+        uberFood.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
+        uberFood.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
+
+        snake.forEach(item => {
+            if (item.x == uberFood.x && uberFood.y == food.y) {
+                createUber();
+                return;
+            }
+        });
+
+    }
+
+    function drawUber() {
+        ctx.drawImage(uber, uberFood.x, uberFood.y);
+
+    }
+
+    //  house
+    const houseSmallImage = new Image();
+    houseSmallImage.src = 'img/houseSmall.png';
+    const houseBigImage = new Image();
+    houseBigImage.src = 'img/houseBig.png';
+    const house = [];
+
+    function createHouse() {
+
+        let x = () => el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
+        let y = () => el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
+
+        for (let i = 0; i < 4; i++) {
+            house.push({
+                x: x(),
+                y: y(),
+            });
+        }
+
+    }
+
+    function drawHouse() {
+        house.forEach((item, i) => {
+            if (i % 2 != 0) {
+                ctx.drawImage(houseBigImage, item.x, item.y);
+            } else {
+                ctx.drawImage(houseSmallImage, item.x, item.y);
+            }
+        });
+
+    }
+
+
+    // snake
+    const snake = [{}];
+
+    function createSnake() {
+        snake[0].x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
+        snake[0].y = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
+
+    }
+
+    const headImage = new Image();
+    headImage.src = 'img/taxi.svg';
+    // headImage.src ='img/car.png';
+    const imageUp = new Image();
+    imageUp.src = 'img/taxiUp.png';
+
+    function drawSnake() {
+        snake.forEach((item, i) => {
+            if (i == 0) {
+                ctx.drawImage(headImage, item.x, item.y);
+            } else {
+                ctx.drawImage(imageUp, item.x, item.y);
+            }
+
+        });
+
+    }
+
+
     function moveSnake() {
-        
+
         let snakeX = snake[0].x;
         let snakeY = snake[0].y;
-    
+
         if (direction == 'left') {
             snakeX -= el;
         } else if (direction == 'right') {
@@ -127,27 +168,32 @@ document.addEventListener('DOMContentLoaded', () => {
         if (snake[0].y > gameHight - el) {
             snakeY = 0;
         }
-        
-        if (snake[0].x == house.x && snake[0].y == house.y) {
-            createNewHouse();
-            
-              snake.length = 1;
-              score.textContent = 0;
-              direction = null;
-              alert(`GAME OVER, ти нащо людям в дім в'їхав???! Score: ${score.textContent}`);
+
+        if (snake.length > 1) {
+            house.forEach(item => {
+                if (snake[0].x == item.x && snake[0].y == item.y) {
+                    house.length = 0;
+                    createHouse();
+    
+                    snake.length = 1;
+                    direction = null;
+                    alert(`GAME OVER, ти нащо людям в дім в'їхав???! Score: ${score.textContent}`);
+                    score.textContent = 0;
+                }
+            });
         }
+
         snake.unshift({
             x: snakeX,
             y: snakeY,
         });
-        
-        
-        
 
-        if ( (snake[0].x == food.x && snake[0].y == food.y) || (snake[0].x == uberFood.x + el && snake[0].y == uberFood.y) ) {
+
+        if ((snake[0].x == food.x && snake[0].y == food.y) || 
+            (snake[0].x == uberFood.x + el && snake[0].y == uberFood.y)) {
             score.textContent++;
-            createNewFood();
-            createUberFood();
+            createPassenger();
+            createUber();
 
         } else {
             snake.pop();
@@ -161,18 +207,18 @@ document.addEventListener('DOMContentLoaded', () => {
                     snake.length = 1;
                     score.textContent = 0;
                     direction = null;
-                   
+
                 }
             }
         });
 
-        
+
     }
 
     function controlSnakeDirection() {
 
         document.addEventListener('keydown', (e) => {
-            if ((e.code == 'ArrowLeft' || e.code == 'KeyA' ) && direction !== 'right') {
+            if ((e.code == 'ArrowLeft' || e.code == 'KeyA') && direction !== 'right') {
                 direction = 'left';
             } else if ((e.code == 'ArrowRight' || e.code == 'KeyD') && direction !== 'left') {
                 direction = 'right';
@@ -184,42 +230,32 @@ document.addEventListener('DOMContentLoaded', () => {
         });
 
         up.addEventListener('click', (e) => {
-            if (direction !== 'down') {direction = 'up';} 
+            if (direction !== 'down') {
+                direction = 'up';
+            }
         });
         down.addEventListener('click', (e) => {
-            if (direction !== 'up') {direction = 'down';} 
+            if (direction !== 'up') {
+                direction = 'down';
+            }
         });
         left.addEventListener('click', (e) => {
-            if (direction !== 'right') {direction = 'left';} 
+            if (direction !== 'right') {
+                direction = 'left';
+            }
         });
         right.addEventListener('click', (e) => {
-            if (direction !== 'left') {direction = 'right';} 
+            if (direction !== 'left') {
+                direction = 'right';
+            }
         });
 
     }
 
-    //  house
-    const houseSmallImage = new Image();
-    houseSmallImage.src = 'img/houseSmall.png';
-    const houseBigImage = new Image();
-    houseBigImage.src = 'img/houseBig.png';
-    const house = {};
-
-    function createNewHouse() {
-    
-        house.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
-        house.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
-        
-    }
-
-    function drawHouse() {
-        ctx.drawImage(houseBigImage, house.x, house.y);
-        
-
-    }
 
 
-// game Loop
+
+    // game Loop
 
     function gameLoop() {
 
@@ -231,21 +267,22 @@ document.addEventListener('DOMContentLoaded', () => {
 
         ctx.clearRect(0, 0, gameWidth, gameHight);
         drawFill();
-        drawFood();
-        drawUberFood();
+        drawPassenger();
+        drawUber();
         drawHouse();
         drawSnake();
         moveSnake();
-        
+
     }
 
-    gameLoop();
+    createHouse();
+    createSnake();
     controlSnakeDirection();
-    createNewHouse();
-    createNewFood();
-    createUberFood();
+    createPassenger();
+    createUber();
+    gameLoop();
 
-  
-    
+
+
 
 });
