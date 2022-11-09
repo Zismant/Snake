@@ -9,12 +9,12 @@ document.addEventListener('DOMContentLoaded', () => {
     let step = 0;
     let maxStep = 20;
 
-    const gameWidth = 300;
-    const gameHight = 150;
+    const gameWidth = 1600;
+    const gameHight = 800;
 
    
 
-    const el = 15;
+    const el = 100;
     const score = document.querySelector('span');
     score.textContent = 0;
     let direction = null;
@@ -35,7 +35,7 @@ document.addEventListener('DOMContentLoaded', () => {
 // food
     const food = {};
     const passenger = new Image();
-    passenger.src = 'img/passenger1.png';
+    passenger.src = 'img/passenger.png';
 
     function createNewFood() {
         
@@ -83,9 +83,10 @@ document.addEventListener('DOMContentLoaded', () => {
         y: el * Math.floor(Math.random() * (gameWidth / el - 0) + 0),
     }];
     const headImage = new Image();
-    headImage.src ='img/taxi11.svg';
+    headImage.src ='img/taxi.svg';
+    // headImage.src ='img/car.png';
     const imageUp = new Image();
-    imageUp.src ='img/taxiUp1.png';
+    imageUp.src ='img/taxiUp.png';
     
     function drawSnake() {
         snake.forEach((item, i) => {
@@ -199,22 +200,20 @@ document.addEventListener('DOMContentLoaded', () => {
 
     //  house
     const houseSmallImage = new Image();
-    houseSmallImage.src = 'img/houseSmall1.png';
+    houseSmallImage.src = 'img/houseSmall.png';
     const houseBigImage = new Image();
     houseBigImage.src = 'img/houseBig.png';
     const house = {};
 
     function createNewHouse() {
-        
+    
         house.x = el * Math.floor(Math.random() * (gameWidth / el - 0) + 0);
         house.y = el * Math.floor(Math.random() * (gameHight / el - 0) + 0);
-        console.log(house);
-        
         
     }
 
     function drawHouse() {
-        ctx.drawImage(houseSmallImage, house.x, house.y);
+        ctx.drawImage(houseBigImage, house.x, house.y);
         
 
     }

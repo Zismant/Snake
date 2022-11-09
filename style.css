@@ -1,7 +1,13 @@
+body {
+    width: 1600px;
+    margin: auto;
+}
 #canvas {
-    display: block;
+  display: block;
+   
     margin: auto;
     margin-top: 100px;
+    border: 3px solid black;
 
 }
 
@@ -16,27 +22,27 @@ div.score {
 .wrep1 {
     width: 500px;
     margin: auto;
-    margin-top: 300px;
+    margin-top: 500px;
     display: flex;
     justify-content: center;
 }
 
 #up, #left, #right, #down {
-    width: 265px;
-    height: 120px;
-    margin: 40px;
-    font-size: 40px;
+    width: 300px;
+    height: 150px;
+    margin: 50px;
+    font-size: 60px;
 }
 
 .wrep2 {
-    width: 900px;
+    width: 1200px;
     margin: auto;
     display: flex;
     justify-content: space-between;    
 }
 
 .wrep3 {
-    width: 500px;
+    width: 600px;
     margin: auto;
     display: flex;
     justify-content: center;
